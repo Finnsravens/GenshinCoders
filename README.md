@@ -11,7 +11,7 @@ This is for our final-year project on SYSTEM ANALYSIS AND DESIGN METHODS (DDWD 2
 List of our members group:<br>
    <ul>
       <li>AHMAD NABIL BIN AHMAD NAZRIL (A20DW2049)</li>
-      <li>DANESH A/L MUTHU KRISNAN  (A20DW2017)</li>
+      <li>DANESH MUTHU KRISNAN  (A20DW2017)</li>
       <li>MUHAMMAD HANIF AZRI BIN AZIZAN (A20DW0185)</li>
       <li>MUHAMMAD FAHIM MIRZA BIN ZAILI (A20DW2123)</li>
    </ul>
