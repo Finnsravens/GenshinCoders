@@ -1,13 +1,16 @@
 package ani.saikou.manga
 
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ani.saikou.*
 import ani.saikou.anilist.Anilist
 import ani.saikou.databinding.ActivityMangaReaderBinding
@@ -16,6 +19,7 @@ import ani.saikou.manga.source.MangaSources
 import ani.saikou.media.Media
 import ani.saikou.media.MediaDetailsViewModel
 import ani.saikou.settings.ReaderSettings
+import ani.saikou.settings.UserInterfaceSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -38,12 +42,60 @@ class MangaReaderActivity : AppCompatActivity() {
     private var currentChapterPage = 0L
 
     private var settings = ReaderSettings()
+    private var uiSettings = UserInterfaceSettings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideSystemBars()
+
+        settings = loadData("reader_settings")?: ReaderSettings().apply { saveData("reader_settings",this) }
+        uiSettings = loadData("ui_settings")?: UserInterfaceSettings().apply { saveData("ui_settings",this) }
+
+        val overshoot = AnimationUtils.loadInterpolator(this,R.anim.over_shoot)
+        val controllerDuration = (uiSettings.animationSpeed*200).toLong()
+        fun handleController(shouldShow:Boolean?=null){
+
+            shouldShow?.apply { isContVisible = !this }
+
+            if(isContVisible){
+                toastString("hide : $shouldShow")
+                ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f, 0f).setDuration(controllerDuration).start()
+                ObjectAnimator.ofFloat(binding.mangaReaderBottomCont, "translationY", 0f, 128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
+                ObjectAnimator.ofFloat(binding.mangaReaderTopCont, "translationY", 0f, -128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
+
+                binding.mangaReaderCont.postDelayed({
+                    isContVisible = false
+                    binding.mangaReaderCont.visibility = View.GONE
+                },controllerDuration)
+            }else{
+                toastString("show : $shouldShow")
+                isContVisible = true
+                binding.mangaReaderCont.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.mangaReaderCont,"alpha",0f,1f).setDuration(controllerDuration).start()
+                ObjectAnimator.ofFloat(binding.mangaReaderTopCont,"translationY",128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
+                ObjectAnimator.ofFloat(binding.mangaReaderBottomCont,"translationY",-128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
+            }
+        }
+
+        binding.mangaReaderRecycler.tapListener = {
+            toastString("clicked")
+            handleController()
+        }
+
+        binding.mangaReaderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
+                handleController(false)
+//                if(!v.canScrollVertically(-1)) {
+//                    handleController(true)
+//                }
+//                if(!v.canScrollVertically(1)) {
+//                    handleController(true)
+//                }
+                super.onScrolled(v, dx, dy)
+            }
+        })
 
         media = if(model.getMedia().value==null)
             try{
@@ -126,7 +178,8 @@ class MangaReaderActivity : AppCompatActivity() {
                     if (chapImages != null) {
                         maxChapterPage = chapImages.size.toLong()
                         saveData("${media.id}_${it.number}", maxChapterPage)
-                        binding.mangaReaderRecycler.adapter = ImageAdapter(chapImages, chapter.headers,chapter.transformation)
+
+                        binding.mangaReaderRecycler.adapter = ImageAdapter(chapter,settings.default)
                         binding.mangaReaderRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                     }
                 }

@@ -37,6 +37,7 @@ class Gogo(private val dub:Boolean=false, override val name: String = "gogoanime
         val domain = Regex("""(?<=^http[s]?://).+?(?=/)""").find(url)!!.value
         val extractor : Extractor?=when {
             "gogo" in domain -> GogoCDN()
+            "goload" in domain -> GogoCDN()
             "sb" in domain ->  StreamSB()
             "fplayer" in domain -> FPlayer(getSize)
             "fembed" in domain -> FPlayer(getSize)

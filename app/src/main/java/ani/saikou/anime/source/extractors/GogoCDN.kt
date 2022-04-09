@@ -1,5 +1,6 @@
 package ani.saikou.anime.source.extractors
 
+import android.net.Uri
 import android.util.Base64
 import ani.saikou.anime.Episode
 import ani.saikou.anime.source.Extractor
@@ -29,7 +30,7 @@ class GogoCDN : Extractor() {
         if(url.contains("streaming.php")) {
             response.select("script[data-name=\"episode\"]").attr("data-value").also {
                 val id = cryptoHandler(cryptoHandler(it,false).findBetween("","&")!!,true)
-                Jsoup.connect("https://gogoplay4.com/encrypt-ajax.php?id=$id")
+                Jsoup.connect("https://${Uri.parse(url).host}/encrypt-ajax.php?id=$id")
                 .ignoreHttpErrors(true).ignoreContentType(true)
                 .header("X-Requested-With", "XMLHttpRequest").get().body().toString().apply {
                     cryptoHandler(this.findBetween("""{"data":"""","\"}")?:return@apply,false)

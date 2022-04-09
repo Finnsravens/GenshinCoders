@@ -2,19 +2,29 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:layout_height="480dp"
     android:background="@color/bg"
-    android:focusable="false"
-    android:minHeight="128dp">
+    android:focusable="false">
 
     <ani.saikou.NoGestureSubsamplingImageView
-        android:id="@+id/imgProgImage"
+        android:id="@+id/imgProgImageNoGestures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:focusable="false"
         android:scaleType="fitCenter"
+        android:visibility="gone"
+        tools:ignore="ContentDescription,ImageContrastCheck"
+        tools:src="@tools:sample/backgrounds/scenic[0]" />
+
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+        android:id="@+id/imgProgImageGestures"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:focusable="false"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
         tools:ignore="ContentDescription,ImageContrastCheck"
         tools:src="@tools:sample/backgrounds/scenic[0]" />
 

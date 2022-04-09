@@ -19,6 +19,7 @@ import okhttp3.RequestBody
 import java.io.Serializable
 import java.net.UnknownHostException
 
+val httpClient =  OkHttpClient()
 
 fun executeQuery(query:String, variables:String="",force:Boolean=false,useToken:Boolean=true,show:Boolean=false): JsonObject? {
     try {
@@ -36,7 +37,7 @@ fun executeQuery(query:String, variables:String="",force:Boolean=false,useToken:
 
         if (Anilist.token!=null || force) {
             if (Anilist.token!=null && useToken) request.header("Authorization", "Bearer ${Anilist.token}")
-            val json = OkHttpClient().newCall(request.build()).execute().body?.string()?:return null
+            val json = httpClient.newCall(request.build()).execute().body?.string()?:return null
             if(show) toastString("JSON : $json")
             val js = Json.decodeFromString<JsonObject>(json)
             if(js["data"]!=JsonNull)

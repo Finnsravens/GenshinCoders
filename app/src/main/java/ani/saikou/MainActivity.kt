@@ -24,6 +24,7 @@ import ani.saikou.anilist.AnilistHomeViewModel
 import ani.saikou.databinding.ActivityMainBinding
 import ani.saikou.media.MediaDetailsActivity
 import ani.saikou.others.AppUpdater
+import ani.saikou.others.DisableFirebase
 import ani.saikou.settings.UserInterfaceSettings
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DisableFirebase.handle()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

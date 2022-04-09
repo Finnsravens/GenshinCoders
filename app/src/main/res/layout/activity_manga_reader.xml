@@ -14,14 +14,23 @@
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mangaReaderRecycler"
+    <ani.saikou.manga.zoomrecycler.ZoomFrame
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent" >
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <ani.saikou.manga.zoomrecycler.ZoomRecyclerView
+            android:id="@+id/mangaReaderRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingTop="128dp"
+            android:paddingBottom="128dp"
+            tools:ignore="SpeakableTextPresentCheck"/>
+
+    </ani.saikou.manga.zoomrecycler.ZoomFrame>
 
     <FrameLayout
+        android:id="@+id/mangaReaderCont"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -75,13 +84,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/current_page"
+                    android:stepSize="1"
                     android:valueFrom="0.0"
                     android:valueTo="100.0"
-                    android:stepSize="1"
-                    app:tickColor = "#0000"
                     app:labelBehavior="floating"
                     app:labelStyle="@style/fontTooltip"
                     app:thumbRadius="8dp"
+                    app:tickColor="#0000"
                     app:trackHeight="2dp" />
 
                 <androidx.cardview.widget.CardView
@@ -146,7 +155,7 @@
                         android:layout_height="48dp"
                         android:backgroundTint="#00FFFFFF"
                         android:src="@drawable/ic_round_arrow_back_ios_new_24"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -193,6 +202,7 @@
                             android:layout_height="48dp"
                             android:backgroundTint="#00FFFFFF"
                             android:src="@drawable/ic_round_download_24"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
@@ -203,6 +213,7 @@
                             android:layout_height="48dp"
                             android:backgroundTint="#00FFFFFF"
                             android:src="@drawable/ic_round_reader_settings"
+                            android:visibility="gone"
                             app:tint="#fff"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
@@ -215,7 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:fontFamily="@font/poppins_bold"
                     android:textAlignment="textEnd"
                     android:textColor="#fff"

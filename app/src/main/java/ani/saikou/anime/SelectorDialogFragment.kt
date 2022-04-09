@@ -56,7 +56,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment(){
             media = m
             if (media != null && !loaded) {
                 loaded = true
-                println(media?.id)
                 episode = media?.anime?.episodes?.get(media?.anime?.selectedEpisode)
                 if(episode!=null){
                     if (selected != null) {
