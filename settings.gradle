@@ -6,5 +6,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Saikou"
+rootProject.name = "Genshin Coders"
 include ':app'
