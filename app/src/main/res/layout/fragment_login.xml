@@ -26,7 +26,7 @@
             android:fontFamily="@font/poppins_thin"
             android:text="@string/app_name"
             android:textColor="?attr/colorPrimary"
-            android:textSize="76sp" />
+            android:textSize="45sp" />
 
         <TextView
             android:id="@+id/loginAppSlogan"
@@ -73,17 +73,6 @@
                 android:layout_margin="8dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_github"
-                app:tint="@color/bg_opp"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/loginTelegram"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:padding="6dp"
-                android:src="@drawable/ic_telegram"
                 app:tint="@color/bg_opp"
                 tools:ignore="ContentDescription" />
 

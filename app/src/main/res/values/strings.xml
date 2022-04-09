@@ -1,12 +1,11 @@
 <resources>
-    <string name="app_name">Saikou</string>
+    <string name="app_name">Genshin Coders</string>
     <string name="slogan">The Best Anime, Manga &amp; Novel app for Android.</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <string name="discord">https://discord.gg/5TXAWTU5qr</string>
-    <string name="telegram">https://telegram.me/saikou_app</string>
-    <string name="github">https://github.com/saikou-app/saikou</string>
+    <string name="discord">https://discord.gg/ngzEbB93mh</string>
+    <string name="github">https://github.com/Finnsravens/GenshinCoders#readme</string>
 
     <string name="home">Home</string>
     <string name="anime">Anime</string>

@@ -622,7 +622,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/bg_opp"
                 app:cornerRadius="0dp"
-                app:icon="@drawable/ic_round_accessible_forward_24"
+                app:icon="@drawable/ic_baseline_engineering_24"
                 app:iconPadding="16dp"
                 app:iconSize="24dp" />
 
