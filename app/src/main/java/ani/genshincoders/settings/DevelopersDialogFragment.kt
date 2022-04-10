@@ -13,10 +13,11 @@ class DevelopersDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val developers = arrayOf(
-        Developer("Ahmad Nabil  (A20DW2049)","https://yt3.ggpht.com/ytc/AKedOLSWUFCT09OlUZaXLCcnVB4dqCp_RSTmB0puAhVkYQ=s176-c-k-c0x00ffffff-no-rj","Owner & Maintainer","https://www.youtube.com/channel/UCNpUTnOHcrY5ekNQ06wjtmA"),
-        Developer("Danesh   (A20DW2017)","https://yt3.ggpht.com/ytc/AKedOLQF-p0b6ZXYn11Ev-czQQQiaLrP2RIAlJZbXqp_uA=s176-c-k-c0x00ffffff-no-rj","Maintainer","https://www.youtube.com/channel/UC5pDrgWzhayaozspLQGw_yw/featured"),
-        Developer("Hanif Azri   (A20DW0185)","https://yt3.ggpht.com/ytc/AKedOLR9CphV2W80JJ1Mjl4JP-c5ctJ94mi-LWTYHiUSnQ=s176-c-k-c0x00ffffff-no-rj","Contributor","https://www.youtube.com/c/NepzGamingOfficial"),
-        Developer("Fahim Mirza  (A20DW2123)","https://yt3.ggpht.com/ytc/AKedOLQ63iCPuvu4iYLyfGQZFD6n34SIfaT8nIriOZ0qGw=s176-c-k-c0x00ffffff-no-rj","Designer","https://www.youtube.com/channel/UCL-viqibUaAX0RsRLhvl9iQ"),
+        Developer("vorobyovgabriel","https://avatars.githubusercontent.com/u/99561687?s=120&v=4","Owner","https://github.com/vorobyovgabriel"),
+        Developer("brahmkshtriya","https://avatars.githubusercontent.com/u/69040506?s=120&v=4","Maintainer","https://github.com/brahmkshatriya"),
+        Developer("jeelpatel231","https://avatars.githubusercontent.com/u/33726155?s=120&v=4","Contributor","https://github.com/jeelpatel231"),
+        Developer("blatzar","https://avatars.githubusercontent.com/u/46196380?s=120&v=4","Contributor","https://github.com/Blatzar"),
+        Developer("bilibox","https://avatars.githubusercontent.com/u/1800580?s=120&v=4","Contributor","https://github.com/Bilibox"),
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
