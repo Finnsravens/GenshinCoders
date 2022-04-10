@@ -62,6 +62,11 @@ List of our members group:<br>
 https://saikou-app.github.io/
 
 
+## Credits:-
+
+Owner - https://github.com/brahmkshatriya
+
+
 ## License
 
-Genshin Coders is licensed under the [GNU General Public License v3.0](LICENSE.md)
+Saikou is licensed under the [GNU General Public License v3.0](LICENSE.md)
