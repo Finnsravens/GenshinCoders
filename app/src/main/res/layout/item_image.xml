@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="480dp"
+    android:layout_gravity="center"
     android:background="@color/bg"
     android:focusable="false">
 
@@ -10,6 +11,7 @@
         android:id="@+id/imgProgImageNoGestures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:focusable="false"
         android:scaleType="fitCenter"
@@ -21,6 +23,7 @@
         android:id="@+id/imgProgImageGestures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:focusable="false"
         android:scaleType="fitCenter"

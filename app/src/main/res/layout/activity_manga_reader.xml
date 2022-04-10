@@ -32,7 +32,9 @@
     <FrameLayout
         android:id="@+id/mangaReaderCont"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <FrameLayout
             android:id="@+id/mangaReaderBottomCont"
@@ -43,19 +45,12 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/linear_gradient_black"
-                tools:ignore="ContentDescription,ImageContrastCheck" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/linear_gradient_black"
+                app:srcCompat="@drawable/rounded_top_nav"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
@@ -80,17 +75,19 @@
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.slider.Slider
+                    android:id="@+id/mangaReaderPageSlider"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/current_page"
                     android:stepSize="1"
-                    android:valueFrom="0.0"
+                    android:valueFrom="1.0"
                     android:valueTo="100.0"
                     app:labelBehavior="floating"
                     app:labelStyle="@style/fontTooltip"
                     app:thumbRadius="8dp"
                     app:tickColor="#0000"
+                    app:trackColorInactive="@color/bg_white"
                     app:trackHeight="2dp" />
 
                 <androidx.cardview.widget.CardView
@@ -136,6 +133,7 @@
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
+                android:id="@+id/mangaReaderTopLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
@@ -170,7 +168,7 @@
                             android:layout_height="48dp"
                             android:layout_marginEnd="0dp"
                             android:layout_marginBottom="-10dp"
-                            android:background="@drawable/spinner_icon"
+                            android:background="@drawable/spinner_icon_manga"
                             android:backgroundTint="#fff"
                             android:backgroundTintMode="src_atop"
                             android:entries="@array/tips"
@@ -238,15 +236,16 @@
         </FrameLayout>
     </FrameLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ani.genshincoders.others.OutlineTextView
+        android:id="@+id/mangaReaderPageNumber"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
+        android:fontFamily="@font/poppins_bold"
         android:padding="4dp"
-        android:shadowColor="#000"
-        android:shadowDy="4"
-        android:shadowRadius="8"
-        android:textColor="#fff"
-        tools:ignore="TextContrastCheck"
-        tools:text="0/10" />
+        app:outlineWidth="1"
+        app:outlineColor="#A9000000"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        tools:text="1/10" />
 </FrameLayout>

@@ -1,5 +1,6 @@
 package ani.genshincoders.manga
 
+import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.genshincoders.databinding.ItemImageBinding
 import ani.genshincoders.px
 import ani.genshincoders.settings.CurrentReaderSettings
+import ani.genshincoders.settings.UserInterfaceSettings
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.target.CustomViewTarget
@@ -21,8 +23,9 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import java.io.File
 
 class ImageAdapter(
-private val chapter: MangaChapter,
-private val settings: CurrentReaderSettings,
+    private val chapter: MangaChapter,
+    private val settings: CurrentReaderSettings,
+    private val uiSettings: UserInterfaceSettings
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val images = chapter.images?: arrayListOf()
 
@@ -46,33 +49,35 @@ private val settings: CurrentReaderSettings,
                 binding.imgProgImageNoGestures
             }else binding.imgProgImageGestures
 
-            binding.imgProgProgress.visibility= View.VISIBLE
+            imageView.recycle()
+            imageView.visibility= View.VISIBLE
 
-
-            Glide.with(imageView).download(GlideUrl(images[position]){chapter.headers?: mutableMapOf()}).override(Target.SIZE_ORIGINAL)
-            .apply{
-                val target = object : CustomViewTarget<SubsamplingScaleImageView, File>(imageView) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        binding.imgProgProgress.visibility= View.GONE
-                    }
-                    override fun onResourceCleared(placeholder: Drawable?) {}
-
-                    override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                        imageView.visibility = View.VISIBLE
-                        if(settings.layout != CurrentReaderSettings.Layouts.PAGED) binding.root.updateLayoutParams {
-                            height = ViewGroup.LayoutParams.WRAP_CONTENT
+            Glide.with(imageView).download(GlideUrl(images[position]){chapter.headers?: mutableMapOf()})
+                .override(Target.SIZE_ORIGINAL)
+                .apply{
+                    val target = object : CustomViewTarget<SubsamplingScaleImageView, File>(imageView) {
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+                            binding.imgProgProgress.visibility= View.GONE
                         }
-                        view.setImage(ImageSource.uri(Uri.fromFile(resource)))
-                        binding.imgProgProgress.visibility= View.GONE
-                    }
-                }
-                val transformation = chapter.transformation
-                if(transformation!=null)
-                    transform(File("").javaClass, transformation).into(target)
-                else
-                    into(target)
+                        override fun onResourceCleared(placeholder: Drawable?) {}
 
-            }
+                        override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                            imageView.visibility = View.VISIBLE
+                            if(settings.layout != CurrentReaderSettings.Layouts.PAGED) binding.root.updateLayoutParams {
+                                height = ViewGroup.LayoutParams.WRAP_CONTENT
+                            }
+                            view.setImage(ImageSource.uri(Uri.fromFile(resource)))
+                            ObjectAnimator.ofFloat(binding.root,"alpha",0f,1f).setDuration((400*uiSettings.animationSpeed).toLong()).start()
+                            binding.imgProgProgress.visibility= View.GONE
+                        }
+                    }
+                    val transformation = chapter.transformation
+                    if(transformation!=null)
+                        transform(File("").javaClass, transformation).into(target)
+                    else
+                        into(target)
+
+                }
         }
     }
 }

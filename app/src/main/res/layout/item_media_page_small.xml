@@ -32,8 +32,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="110dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
@@ -140,8 +140,9 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_bold"
                     android:maxLines="3"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:transitionName="mediaTitle"
+                    tools:ignore="SpUsage"
                     tools:text="@string/slogan" />
 
                 <TextView
@@ -152,12 +153,12 @@
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingTop="4sp"
+                    android:paddingTop="4dp"
                     android:singleLine="true"
                     android:text="@string/status"
                     android:textColor="?attr/colorPrimary"
-                    android:textSize="14sp"
-                    tools:ignore="TextContrastCheck" />
+                    android:textSize="14dp"
+                    tools:ignore="SpUsage,TextContrastCheck" />
 
             </LinearLayout>
         </LinearLayout>
@@ -178,7 +179,8 @@
                     android:id="@+id/itemCompactTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
+                    tools:ignore="SpUsage"
                     tools:text="100" />
 
                 <TextView
@@ -189,7 +191,8 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/eps"
-                    android:textSize="14sp" />
+                    android:textSize="14dp"
+                    tools:ignore="SpUsage" />
 
             </LinearLayout>
 
@@ -203,8 +206,9 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAlignment="viewEnd"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:transitionName="mediaTitle"
+                tools:ignore="SpUsage"
                 tools:text="@string/genres" />
         </LinearLayout>
 

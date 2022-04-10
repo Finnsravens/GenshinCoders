@@ -7,4 +7,8 @@
         <attr format="integer" name="zoom_duration"/>
         <attr format="boolean" name="zoom_enabled"/>
     </declare-styleable>
+    <declare-styleable name="OutlineTextView">
+        <attr name="outlineColor" format="color"/>
+        <attr name="outlineWidth" format="float"/>
+    </declare-styleable>
 </resources>

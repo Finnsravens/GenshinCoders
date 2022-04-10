@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Genshin Coders</string>
-    <string name="slogan">The Best Anime, Manga &amp; Novel app for Android.</string>
+    <string name="app_name"><b>myAnime+</b></string>
+    <string name="slogan">All-in-One Anime, Manga &amp; Novel app for weebs and otakus.</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
@@ -133,18 +133,11 @@
     <string name="common">Common</string>
     <string name="theme">Theme</string>
     <string name="ui_settings">UI Settings</string>
-    <string name="about">About</string>
-    <string name="desc">\u0008\u0008\u0008 Saikou is crafted based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime &amp; Manga.\nSaikou literally means the \"best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?</string>
+    <string name="about">About Us</string>
+    <string name="desc">\u0008\u0008\u0008 myAnime+ is crafted based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime &amp; Manga.</string>
     <string name="devs">Developers</string>
-    <string name="disclaimer">Disclaimer</string>
-    <string name="full_disclaimer">
-         - Saikou only scrapes links from various websites and makes it easier for users to find anime and manga.
-        \n - Saikou or any of its developer/staff doesn\'t host any of the contents found inside Saikou. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
-        \n - Furthermore, all of the anime/manga links found in Saikou are taken from various 3rd party anime hosting websites.
-        \n - Saikou or it\'s owners aren\'t liable for any misuse of any of the contents found inside or outside of the app and cannot be held accountable for the distribution of any of the contents found inside the app.
-        \n - By using Saikou, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app; nonetheless they may or may not be from their legitimate sources.
-        \n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
-    </string>
+    <string name="disclaimer">Made by Genshin Coders™</string>
+    <string name="full_disclaimer">Thank you for using our app! ❤️</string>
     <string name="version_current">Version %1$s</string>
     <string-array name="tips">
         <item>You can Long Click an episode/chapter to Mark it as Read.</item>
@@ -157,7 +150,6 @@
         <item>Damn, why are you wasting your Time?</item>
         <item>Looks like someone likes this Animation.</item>
         <item>Upgrade to Android 12 to get this every time you open the App.</item>
-        <item>Lord &amp; Saviour - brahmkshatriya</item>
         <item>You can Long Click to copy this Message.</item>
         <item>Saikou!</item>
     </string-array>

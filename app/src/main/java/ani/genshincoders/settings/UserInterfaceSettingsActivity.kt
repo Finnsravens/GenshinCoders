@@ -68,11 +68,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             restartApp()
         }
 
-        val map = mapOf(2f to 0.5f, 1.75f to 0.625f, 1.5f to 0.75f, 1.25f to 1.25f,1f to 1f,0.75f to 1.25f,0.5f to 1.5f,0.25f to 1.75f,0f to 0f)
+        val map = mapOf(2f to 0.5f, 1.75f to 0.625f, 1.5f to 0.75f, 1.25f to 0.875,1f to 1f,0.75f to 1.25f,0.5f to 1.5f,0.25f to 1.75f,0f to 0f)
         val mapReverse = map.map { it.value to it.key }.toMap()
         binding.uiSettingsAnimationSpeed.value = mapReverse[settings.animationSpeed]?:1f
         binding.uiSettingsAnimationSpeed.addOnChangeListener { _, value, _ ->
-            settings.animationSpeed = map[value] ?: 1f
+            settings.animationSpeed = (map[value] ?: 1f) as Float
             saveData(ui,settings)
             restartApp()
         }

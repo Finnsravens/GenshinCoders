@@ -21,44 +21,44 @@ object AppUpdater {
     fun check(activity: Activity){
         try{
             val version =
-            if(!BuildConfig.DEBUG)
-                OkHttpClient().newCall(Request.Builder().url("https://raw.githubusercontent.com/saikou-app/mal-id-filler-list/main/stable.txt").build()).execute().body?.string()?.replace("\n","")?:return
-            else {
-                OkHttpClient().newCall(
-                    Request.Builder()
-                        .url("https://raw.githubusercontent.com/saikou-app/saikou/main/app/build.gradle")
-                        .build()
-                ).execute().body?.string()?.substringAfter("versionName \"")?.substringBefore('"') ?: return
-            }
+                if(!BuildConfig.DEBUG)
+                    OkHttpClient().newCall(Request.Builder().url("https://raw.githubusercontent.com/saikou-app/mal-id-filler-list/main/stable.txt").build()).execute().body?.string()?.replace("\n","")?:return
+                else {
+                    OkHttpClient().newCall(
+                        Request.Builder()
+                            .url("https://raw.githubusercontent.com/saikou-app/saikou/main/app/build.gradle")
+                            .build()
+                    ).execute().body?.string()?.substringAfter("versionName \"")?.substringBefore('"') ?: return
+                }
             val dontShow = loadData("dont_ask_for_update_$version")?:false
             if(compareVersion(version) && !dontShow && !activity.isDestroyed) activity.runOnUiThread {
                 AlertDialog.Builder(activity, R.style.DialogTheme)
                     .setTitle("A new update is available, do you want to check it out?").apply {
-                    setMultiChoiceItems(
-                        arrayOf("Don't show again for version $version"),
-                        booleanArrayOf(false)
-                    ) { _, _, isChecked ->
-                        if (isChecked) {
-                            saveData("dont_ask_for_update_$version", isChecked)
+                        setMultiChoiceItems(
+                            arrayOf("Don't show again for version $version"),
+                            booleanArrayOf(false)
+                        ) { _, _, isChecked ->
+                            if (isChecked) {
+                                saveData("dont_ask_for_update_$version", isChecked)
+                            }
                         }
-                    }
-                    setPositiveButton("Let's Go") { _: DialogInterface, _: Int ->
-                        if(!BuildConfig.DEBUG) {
-                            MainScope().launch(Dispatchers.IO){
-                                OkHttpClient().newCall(Request.Builder().url("https://api.github.com/repos/saikou-app/saikou/releases/tags/v$version").build()).execute().body?.string()?.apply {
-                                    substringAfter("\"browser_download_url\":\"").substringBefore('"').apply {
-                                        if (endsWith("apk")) activity.downloadUpdate(this)
-                                        else openLinkInBrowser("https://github.com/saikou-app/saikou/releases/")
+                        setPositiveButton("Let's Go") { _: DialogInterface, _: Int ->
+                            if(!BuildConfig.DEBUG) {
+                                MainScope().launch(Dispatchers.IO){
+                                    OkHttpClient().newCall(Request.Builder().url("https://api.github.com/repos/saikou-app/saikou/releases/tags/v$version").build()).execute().body?.string()?.apply {
+                                        substringAfter("\"browser_download_url\":\"").substringBefore('"').apply {
+                                            if (endsWith("apk")) activity.downloadUpdate(this)
+                                            else openLinkInBrowser("https://github.com/saikou-app/saikou/releases/")
+                                        }
                                     }
                                 }
                             }
+                            else openLinkInBrowser( "https://discord.com/channels/902174389351620629/946852010198728704")
                         }
-                        else openLinkInBrowser( "https://discord.com/channels/902174389351620629/946852010198728704")
-                    }
-                    setNegativeButton("Cope") { dialogInterface: DialogInterface, _: Int ->
-                        dialogInterface.dismiss()
-                    }
-                }.show()
+                        setNegativeButton("Cope") { dialogInterface: DialogInterface, _: Int ->
+                            dialogInterface.dismiss()
+                        }
+                    }.show()
             }
         }
         catch (e:Exception){
@@ -128,19 +128,23 @@ object AppUpdater {
     }
 
     fun openApk(context: Context, uri: Uri) {
-        uri.path?.let {
-            val contentUri = FileProvider.getUriForFile(
-                context,
-                BuildConfig.APPLICATION_ID + ".provider",
-                File(it)
-            )
-            val installIntent = Intent(Intent.ACTION_VIEW).apply {
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
-                data = contentUri
+        try{
+            uri.path?.let {
+                val contentUri = FileProvider.getUriForFile(
+                    context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    File(it)
+                )
+                val installIntent = Intent(Intent.ACTION_VIEW).apply {
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
+                    data = contentUri
+                }
+                context.startActivity(installIntent)
             }
-            context.startActivity(installIntent)
+        }catch (e:Exception){
+            toastString(e.toString())
         }
     }
 }

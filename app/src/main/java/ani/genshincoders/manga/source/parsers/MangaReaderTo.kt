@@ -35,10 +35,16 @@ class MangaReaderTo(override val name: String="MangaReader") : MangaParser() {
             val id = Jsoup.connect(chapter.link!!).get().select("#wrapper").attr("data-reading-id")
             val res = Jsoup.connect("$host/ajax/image/list/chap/$id?mode=vertical&quality=high&hozPageSize=1").ignoreContentType(true).execute().body().replace("\\n","\n").replace("\\\"","\"")
             val element = Jsoup.parse(res.findBetween("""{"status":true,"html":"""",""""}""")?: return chapter)
-            element.select(".iv-card.shuffled").forEach {
+            var a = element.select(".iv-card.shuffled")
+            chapter.transformation = transformation
+            if(a.isEmpty()){
+                a = element.select(".iv-card")
+                chapter.transformation = null
+            }
+            a.forEach {
                 chapter.images!!.add(it.attr("data-url"))
             }
-            chapter.transformation =  transformation
+
         }catch (e:Exception){
             toastString(e.toString())
         }

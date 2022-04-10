@@ -43,7 +43,7 @@
     <style name="Theme.Saikou.PopupOverlay" parent="Theme.Saikou" />
 
     <style name="Theme.Saikou.NeverCutout" parent="@style/Theme.Saikou.NoActionBar">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">default</item>
+        <item name="android:navigationBarColor">@color/nav_bg</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.Saikou">

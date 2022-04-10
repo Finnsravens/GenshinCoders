@@ -54,13 +54,18 @@ class EpisodeAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val ep = arr[position]
+        val title = "${if(!ep.title.isNullOrEmpty() && ep.title!="null") "" else "Episode "}${if(!ep.title.isNullOrEmpty() && ep.title!="null") ep.title else ep.number}"
+
         when (holder) {
             is EpisodeListViewHolder  -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(),holder.binding.root,fragment.uiSettings)
-                val ep = arr[position]
+
                 Glide.with(binding.itemEpisodeImage).load(ep.thumb?:media.cover).override(400,0).into(binding.itemEpisodeImage)
                 binding.itemEpisodeNumber.text = ep.number
+                binding.itemEpisodeTitle.text = title
+
                 if(ep.filler){
                     binding.itemEpisodeFiller.visibility = View.VISIBLE
                     binding.itemEpisodeFillerView.visibility = View.VISIBLE
@@ -70,7 +75,7 @@ class EpisodeAdapter(
                 }
                 binding.itemEpisodeDesc.visibility = if (ep.desc!=null && ep.desc?.trim(' ')!="") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc?:""
-                binding.itemEpisodeTitle.text = ep.title?:media.userPreferredName
+
                 if (media.userProgress!=null) {
                     if (ep.number.toFloatOrNull()?:9999f<=media.userProgress!!.toFloat()) {
                         binding.itemEpisodeViewedCover.visibility=View.VISIBLE
@@ -94,10 +99,9 @@ class EpisodeAdapter(
             is EpisodeGridViewHolder -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(),holder.binding.root,fragment.uiSettings)
-                val ep = arr[position]
                 Glide.with(binding.itemEpisodeImage).load(ep.thumb?:media.cover).override(400,0).into(binding.itemEpisodeImage)
                 binding.itemEpisodeNumber.text = ep.number
-                binding.itemEpisodeTitle.text = ep.title ?: media.name
+                binding.itemEpisodeTitle.text = title
                 if (ep.filler) {
                     binding.itemEpisodeFiller.visibility = View.VISIBLE
                     binding.itemEpisodeFillerView.visibility = View.VISIBLE
@@ -133,7 +137,6 @@ class EpisodeAdapter(
             is EpisodeCompactViewHolder -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(),holder.binding.root,fragment.uiSettings)
-                val ep = arr[position]
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeFillerView.visibility = if (ep.filler)  View.VISIBLE else View.GONE
                 if (media.userProgress!=null) {

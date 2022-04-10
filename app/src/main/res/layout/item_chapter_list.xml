@@ -23,7 +23,7 @@
             app:contentPaddingRight="16dp">
 
             <LinearLayout
-                android:layout_width="128dp"
+                android:layout_width="96dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -53,7 +53,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:singleLine="true"
                     android:textSize="16sp"
-                    tools:text="1222" />
+                    tools:text="1" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

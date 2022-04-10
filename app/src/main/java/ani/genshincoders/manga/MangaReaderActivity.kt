@@ -1,13 +1,17 @@
 package ani.genshincoders.manga
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
+import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +26,8 @@ import ani.genshincoders.settings.ReaderSettings
 import ani.genshincoders.settings.UserInterfaceSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.math.min
 
 class MangaReaderActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMangaReaderBinding
@@ -44,6 +50,29 @@ class MangaReaderActivity : AppCompatActivity() {
     private var settings = ReaderSettings()
     private var uiSettings = UserInterfaceSettings()
 
+    private var notchHeight:Int=0
+
+    override fun onAttachedToWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val displayCutout = window.decorView.rootWindowInsets.displayCutout
+            if (displayCutout != null) {
+                if (displayCutout.boundingRects.size>0) {
+                    notchHeight = min(displayCutout.boundingRects[0].width(),displayCutout.boundingRects[0].height())
+                    println("notch : $notchHeight")
+                    checkNotch()
+                }
+            }
+        }
+        super.onAttachedToWindow()
+    }
+
+    private fun checkNotch(){
+        binding.mangaReaderTopLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = notchHeight
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
@@ -53,46 +82,110 @@ class MangaReaderActivity : AppCompatActivity() {
         settings = loadData("reader_settings")?: ReaderSettings().apply { saveData("reader_settings",this) }
         uiSettings = loadData("ui_settings")?: UserInterfaceSettings().apply { saveData("ui_settings",this) }
 
-        val overshoot = AnimationUtils.loadInterpolator(this,R.anim.over_shoot)
+
+        binding.mangaReaderBack.setOnClickListener {
+            onBackPressed()
+        }
+
+        var sliding = false
+        var isAnimating = false
+
+        val overshoot = AccelerateDecelerateInterpolator()
         val controllerDuration = (uiSettings.animationSpeed*200).toLong()
+        var goneTimer = Timer()
+        fun gone() {
+            goneTimer.cancel()
+            goneTimer.purge()
+            val timerTask: TimerTask = object : TimerTask() {
+                override fun run() {
+                    if(!isContVisible) binding.mangaReaderCont.post {
+                        binding.mangaReaderCont.visibility = View.GONE
+                        isAnimating = false
+                    }
+                }
+            }
+            goneTimer = Timer()
+            goneTimer.schedule(timerTask, controllerDuration)
+        }
+
         fun handleController(shouldShow:Boolean?=null){
-
-            shouldShow?.apply { isContVisible = !this }
-
-            if(isContVisible){
-//                toastString("hide : $shouldShow")
-                ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f, 0f).setDuration(controllerDuration).start()
-                ObjectAnimator.ofFloat(binding.mangaReaderBottomCont, "translationY", 0f, 128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
-                ObjectAnimator.ofFloat(binding.mangaReaderTopCont, "translationY", 0f, -128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
-
-                binding.mangaReaderCont.postDelayed({
+            if(!sliding){
+                hideSystemBars()
+                checkNotch()
+                shouldShow?.apply { isContVisible = !this }
+                if(isContVisible){
                     isContVisible = false
-                    binding.mangaReaderCont.visibility = View.GONE
-                },controllerDuration)
-            }else{
-//                toastString("show : $shouldShow")
-                isContVisible = true
-                binding.mangaReaderCont.visibility = View.VISIBLE
-                ObjectAnimator.ofFloat(binding.mangaReaderCont,"alpha",0f,1f).setDuration(controllerDuration).start()
-                ObjectAnimator.ofFloat(binding.mangaReaderTopCont,"translationY",128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
-                ObjectAnimator.ofFloat(binding.mangaReaderBottomCont,"translationY",-128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
+                    if(!isAnimating) {
+                        isAnimating=true
+                        ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f,0f).setDuration(controllerDuration).start()
+                        ObjectAnimator.ofFloat(binding.mangaReaderBottomCont, "translationY", 0f,128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
+                        ObjectAnimator.ofFloat(binding.mangaReaderTopCont, "translationY", 0f,-128f).apply { interpolator = overshoot;duration = controllerDuration;start() }
+                    }
+                    gone()
+                }
+                else{
+                    isContVisible = true
+                    binding.mangaReaderCont.visibility = View.VISIBLE
+                    ObjectAnimator.ofFloat(binding.mangaReaderCont,"alpha",0f,1f).setDuration(controllerDuration).start()
+                    ObjectAnimator.ofFloat(binding.mangaReaderTopCont,"translationY",-128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
+                    ObjectAnimator.ofFloat(binding.mangaReaderBottomCont,"translationY",128f,0f).apply { interpolator=overshoot;duration=controllerDuration;start() }
+                }
             }
         }
 
+        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
+
+        layoutManager.isItemPrefetchEnabled = true
+        layoutManager.initialPrefetchItemCount = 3
+
+        binding.mangaReaderRecycler.layoutManager = layoutManager
+
         binding.mangaReaderRecycler.tapListener = {
-//            toastString("clicked")
             handleController()
+        }
+
+        var pageSliderTimer = Timer()
+        fun pageSliderHide() {
+            pageSliderTimer.cancel()
+            pageSliderTimer.purge()
+            val timerTask: TimerTask = object : TimerTask() {
+                override fun run() {
+                    binding.mangaReaderCont.post {
+                        sliding = false
+                        handleController(false)
+                    }
+                }
+            }
+            pageSliderTimer = Timer()
+            pageSliderTimer.schedule(timerTask, 3000)
+        }
+
+        binding.mangaReaderPageSlider.addOnChangeListener { _, value, fromUser ->
+            if(fromUser) {
+                sliding = true
+                binding.mangaReaderRecycler.smoothScrollToPosition(value.toInt()-1)
+                pageSliderHide()
+            }
+        }
+
+        fun updatePageNumber(page:Long) {
+            if(currentChapterPage!=page) {
+                currentChapterPage = page
+                saveData("${media.id}_${chapter.number}",page,this)
+                binding.mangaReaderPageNumber.text = "${currentChapterPage}/$maxChapterPage"
+                if (!sliding) binding.mangaReaderPageSlider.value = currentChapterPage.toFloat()
+            }
         }
 
         binding.mangaReaderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
-                handleController(false)
-//                if(!v.canScrollVertically(-1)) {
-//                    handleController(true)
-//                }
-//                if(!v.canScrollVertically(1)) {
-//                    handleController(true)
-//                }
+
+                if(!v.canScrollVertically(-1) || !v.canScrollVertically(1)) {
+                    handleController(true)
+                }
+                else handleController(false)
+
+                updatePageNumber(layoutManager.findLastVisibleItemPosition().toLong()+1)
                 super.onScrolled(v, dx, dy)
             }
         })
@@ -171,16 +264,21 @@ class MangaReaderActivity : AppCompatActivity() {
                 if (it != null) {
                     chapter = it
                     media.selected = model.loadSelected(media)
+                    saveData("${media.id}_current_chp",it.number,this)
                     currentChapterIndex = chaptersArr.indexOf(it.number)
                     binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-                    currentChapterPage = loadData("${media.id}_${it.number}", this) ?: 0
+                    currentChapterPage = loadData("${media.id}_${it.number}", this) ?: 1
                     val chapImages = chapter.images
                     if (chapImages != null) {
                         maxChapterPage = chapImages.size.toLong()
-                        saveData("${media.id}_${it.number}", maxChapterPage)
+                        saveData("${media.id}_${it.number}_max", maxChapterPage)
 
-                        binding.mangaReaderRecycler.adapter = ImageAdapter(chapter,settings.default)
-                        binding.mangaReaderRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                        binding.mangaReaderRecycler.adapter = ImageAdapter(chapter,settings.default,uiSettings)
+                        binding.mangaReaderPageSlider.value = currentChapterPage.toFloat()
+                        binding.mangaReaderPageSlider.valueTo = maxChapterPage.toFloat()
+                        binding.mangaReaderPageNumber.text = "${currentChapterPage}/$maxChapterPage"
+
+                        binding.mangaReaderRecycler.scrollToPosition(currentChapterPage.toInt()-1)
                     }
                 }
             }

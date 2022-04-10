@@ -33,7 +33,7 @@ class MediaAdaptor(
     private val mediaList: ArrayList<Media>?,
     private val activity: FragmentActivity,
     private val matchParent:Boolean=false,
-    private val viewPager: ViewPager2?=null
+    private val viewPager: ViewPager2?=null,
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiSettings = loadData<UserInterfaceSettings>("ui_settings")?: UserInterfaceSettings()
