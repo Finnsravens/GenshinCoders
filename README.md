@@ -1,6 +1,6 @@
 # **Genshin Coders' Anime App Redesign**
 
-##COMPLETED##
+#COMPLETED
 
 myAnime+ is crafted based on simplistic yet state-of-the-art elegance. It is an [Anilist](https://anilist.co/) only client, which also lets you stream-download Anime & Manga.
 <br><br>
